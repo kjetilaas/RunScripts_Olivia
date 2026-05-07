@@ -195,6 +195,7 @@ disso_poc = 3.9e-7
 disso_sil = 1.0e-7
 wlin=0.0154762
 wmin=5.4
+NDIFF_SURFACE_ALIGN = .true.
 EOF
 
 cat <<EOF >> user_nl_cice
