@@ -23,7 +23,7 @@ noresmrepo="NorESM_3_0_beta15"
 noresmversion="noresm3_0_beta15"
 
 resolution="ne16pg3_tn14" #f19_g17, ne30pg3_tn14, f45_f45_mg37
-casename="n1850.$resolution.$noresmversion.Run12.Olivia.`date +"%Y-%m-%d"`"
+casename="n1850.$resolution.$noresmversion.Run12_ATMtune.Olivia.`date +"%Y-%m-%d"`"
 compset="1850_CAM70%LT%NORESM%CAMoslo_CLM60%FATES-NOCOMP_CICE_BLOM%HYB%ECO_MOSART_DGLC%NOEVOLVE_SWAV_SESP"
 refcase="n1850.ne16pg3_tn14.noresm3_0_beta14.Run11.Olivia.2026-05-04" #Update here
 refyear="1151" #Update here
@@ -102,6 +102,9 @@ then
         ./create_newcase --case $workpath$casename --compset $compset --res $resolution --project $project --machine $machine --compiler intel --run-unsupported --user-mods-dir $workpath$noresmrepo/cime_config/usermods_dirs/reduced_out_devsim/                
         cd $workpath$casename
 
+        cp /cluster/home/kjetisaa/RunScripts_Olivia/May26/oslo_aero_dust.F90 $workpath$casename/SourceMods/src.cam/
+        cp /cluster/home/kjetisaa/RunScripts_Olivia/May26/oslo_aero_seasalt.F90 $workpath$casename/SourceMods/src.cam/
+
         #XML changes
         echo 'updating settings'  
 
@@ -130,26 +133,29 @@ then
 ## Changes to user_nl_* files goes here
 
 cat <<EOF >> user_nl_cam
-use_aerocom                = .false.
-interpolate_nlat           = 96
-interpolate_nlon           = 144
-interpolate_output         = .true.,.true.
-history_aerosol            = .false.
-zmconv_c0_lnd              =  0.0075D0
-zmconv_c0_ocn              =  0.0050D0
-zmconv_ke                  =  5.0E-6
-zmconv_ke_lnd              =  1.0E-5
-clim_modal_aero_top_press  =  1.D-4
-bndtvg                     = '/cluster/work/projects/nn9560k/inputdata/atm/cam/ggas/noaamisc.r8.nc'
-dust_emis_method           = 'Leung_2023'
-dust_emis_fact             = 6.1D0
-rafsip_on                  = .true.
-micro_mg_dcs               = 600.D-6
-clubb_c8                   = 4.65
-zmconv_tiedke_add	   = 0.7
+use_aerocom = .false.
+interpolate_nlat = 96
+interpolate_nlon = 144
+interpolate_output = .true.,.true.
+history_aerosol = .false.
+zmconv_c0_lnd = 0.015D0
+zmconv_c0_ocn = 0.015D0
+zmconv_ke = 5.0E-6
+zmconv_ke_lnd = 1.0E-5
+clim_modal_aero_top_press = 1.D-4
+bndtvg = '/cluster/shared/noresm/inputdata/atm/cam/ggas/noaamisc.r8.nc'
+dust_emis_method = 'Leung_2023'
+dust_emis_fact = 3.3D0
+rafsip_on = .true.
+micro_mg_dcs = 600.D-6
+clubb_c8 = 5.1
+zmconv_tiedke_add = 1.2
+micro_mg_autocon_lwp_exp = 2.37
+micro_mg_vtrmi_factor= 1.D0
+micro_mg_berg_eff_factor = 0.25D0
 nhtfrq = 0, -24
-mfilt  = 1,   30 
-ndens  = 2,   2
+mfilt = 1, 30
+ndens = 2, 2
 fincl1 = 'IntHeatTr', 'PotEnerTr', 'LatHeatTr', 'KinEnerTr', 'TotEnerTr'
 fincl2 = 'Z500', 'T850', 'U850', 'V850'
 EOF
@@ -183,7 +189,7 @@ EOF
 
 cat <<EOF >> user_nl_blom
 EGC = 2.5
-EGIDFQ = 1.25
+EGIDFQ = 1.30
 dmsp3=0.1296
 dmsp5=0.0136
 dremcalc  = 0.0045
@@ -199,6 +205,7 @@ NDIFF_SURFACE_ALIGN = .true.
 EOF
 
 cat <<EOF >> user_nl_cice
+rsnw_fall= 200
 drsnw_min = 1.0
 floediam = 50.0
 f_aero='m'
@@ -219,9 +226,9 @@ then
     echo "Done with Build"
 
     # copy restart files and pointers
-#    cp /cluster/work/projects/nn9560k/kjetisaa/RESTART/$refcase/$refyear-01-01-00000/*.r*.nc /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
-#    cp /cluster/work/projects/nn9560k/kjetisaa/RESTART/$refcase/$refyear-01-01-00000/rpointer.*$refyear-01-01-00000 /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
-#    cp /cluster/work/projects/nn9560k/kjetisaa/RESTART/$refcase/$refyear-01-01-00000/$refcase.cam.i.$refyear-01-01-00000.nc /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
+    cp /cluster/work/projects/nn9560k/kjetisaa/archive/$refcase/rest/$refyear-01-01-00000/*.r*.nc /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
+    cp /cluster/work/projects/nn9560k/kjetisaa/archive/$refcase/rest/$refyear-01-01-00000/rpointer.*$refyear-01-01-00000 /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
+    cp /cluster/work/projects/nn9560k/kjetisaa/archive/$refcase/rest/$refyear-01-01-00000/$refcase.cam.i.$refyear-01-01-00000.nc /cluster/work/projects/nn9560k/kjetisaa/noresm/$casename/run/ 
     echo "copied restart files and pointers"
 fi
 
