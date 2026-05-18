@@ -23,7 +23,7 @@ noresmrepo="NorESM_3_0_beta16"
 noresmversion="noresm3_0_beta16"
 
 resolution="ne16pg3_tn14" #f19_g17, ne30pg3_tn14, f45_f45_mg37
-casename="n1850.$resolution.$noresmversion.Run12.Olivia.`date +"%Y-%m-%d"`"
+casename="n1850.$resolution.$noresmversion.Run13.Olivia.`date +"%Y-%m-%d"`"
 compset="1850_CAM70%LT%NORESM%CAMoslo_CLM60%FATES-NOCOMP_CICE_BLOM%HYB%ECO_MOSART_DGLC%NOEVOLVE_SWAV_SESP"
 refcase="n1850.ne16pg3_tn14.noresm3_0_beta15.Run12.Olivia.2026-05-05" #Update here
 refyear="1311" #Update here
