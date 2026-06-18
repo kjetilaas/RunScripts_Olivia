@@ -160,8 +160,8 @@ fincl2 = 'Z500', 'T850', 'U850', 'V850'
 EOF
 
 cat <<EOF >> user_nl_clm
-paramfile = '/cluster/home/kjetisaa/RunScripts_Olivia/Jun26/ctsm60_params.noresm.c260611.nc'
-fates_paramfile = '/cluster/home/kjetisaa/RunScripts_Olivia/Jun26/fates_params_noresm_c260615.json'
+paramfile = '/cluster/work/projects/nn9560k/inputdata/lnd/clm2/paramdata/beta19_Run15C/ctsm60_params.noresm.c260611.nc'
+fates_paramfile = '/cluster/work/projects/nn9560k/inputdata/lnd/clm2/paramdata/beta19_Run15C/fates_params_noresm_c260615.json'
 EOF
 
 cat <<EOF >> user_nl_blom
